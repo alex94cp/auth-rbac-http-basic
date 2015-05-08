@@ -4,21 +4,24 @@ function httpBasicCredentialsGiven(req) {
 
 function httpBasicExtractCredentials(req) {
 	var authHeader = req.headers.authorization;
-	var data = authHeader.match(/^Authorization: +Basic +([A-Za-z0-9+]+={0,3})$/i);
+	var re = /^Authorization: +Basic +([A-Za-z0-9+]+={0,3})$/i;
+	var data = re.exec(authHeader);
 	if (!data)
 		return {};
-	var buf = new Buffer(data[0], 'base64');
+	var buf = new Buffer(data[1], 'base64');
 	var data = buf.toString('utf8');
 	if (!data)
 		return {};
-	data = data.split(':');
-	return { user: data[0], pass: data.shift() };
+	var index = data.indexOf(':');
+	if (index == -1)
+		return {};
+	return { user: data.substr(0, index), pass: data.substr(index + 1) };
 }
 
 function httpBasicAskForCredentials(realm) {
 	return function(res) {
 		res.status(401)
-		   .setHeaders('WWW-Authenticate', 'Basic: realm="' + realm + '"')
+		   .header('WWW-Authenticate', 'Basic realm="' + realm + '"')
 		   .send();
 	};
 }
