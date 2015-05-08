@@ -1,0 +1,28 @@
+{
+  "name": "auth-rbac-http-basic",
+  "version": "0.0.0",
+  "description": "HTTP Basic Authentication plugin for auth-rbac",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alex94puchades/auth-rbac-http-basic.git"
+  },
+  "keywords": [
+    "auth",
+    "rbac",
+    "http",
+    "basic"
+  ],
+  "author": "Alejandro Caravaca Puchades <alex94puchades@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alex94puchades/auth-rbac-http-basic/issues"
+  },
+  "devDependencies": {
+    "should": "~6.0.1",
+    "mocha": "~2.2.4"
+  }
+}
