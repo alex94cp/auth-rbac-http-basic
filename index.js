@@ -1,4 +1,4 @@
-var rbac = require('auth-rbac');
+var authRbac = require('auth-rbac');
 
 function extractCredentials(req) {
 	var authHeader = req.headers.authorization;
@@ -29,12 +29,12 @@ function askForCredentials(realm) {
 	};
 }
 
-function httpBasic(auth, realm) {
+function authRbacHttpBasic(auth, realm) {
 	realm = realm || '';
-	return rbac.authenticate(auth, {
+	return authRbac.authenticate(auth, {
 		extractCredentials: extractCredentials,
 		askForCredentials: askForCredentials(realm)
 	});
 }
 
-module.exports = httpBasic;
+module.exports = authRbacHttpBasic;

@@ -1,8 +1,9 @@
 var should = require('should');
 var httpMocks = require('node-mocks-http');
 
-var rbac = {};
-rbac.httpBasic = require('../');
+var authRbac = {};
+authRbac.httpBasic = require('../');
+
 var auth = require('./common');
 
 function checkRequestAuthInfo(req) {
@@ -22,12 +23,12 @@ function checkAskForCredentialsResponse(res) {
 }
 
 describe('httpBasic', function() {
-	var httpBasic = null;
-	
+	var httpBasic;
+
 	before(function() {
-		httpBasic = rbac.httpBasic(auth, 'test');
+		httpBasic = authRbac.httpBasic(auth, 'test');
 	});
-	
+
 	it('should put auth info in req.auth if valid credentials given', function(done) {
 		var req = httpMocks.createRequest({ headers: {
 			// Authorization: Basic #{base64('guest:1234')}
@@ -41,7 +42,7 @@ describe('httpBasic', function() {
 			done();
 		});
 	});
-	
+
 	it('should respond with error if auth method is not basic', function(done) {
 		var req = httpMocks.createRequest({ headers: {
 			// Authorization: Unknown #{base64('guest:1234')}
@@ -56,7 +57,7 @@ describe('httpBasic', function() {
 			return done();
 		});
 	});
-	
+
 	it('should respond with error if auth header is not present', function(done) {
 		var req = httpMocks.createRequest();
 		var res = httpMocks.createResponse();
