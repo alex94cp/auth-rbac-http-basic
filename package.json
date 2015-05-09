@@ -1,6 +1,6 @@
 {
   "name": "auth-rbac-http-basic",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "HTTP Basic Authentication plugin for auth-rbac",
   "main": "index.js",
   "scripts": {
@@ -25,5 +25,8 @@
     "should": "~6.0.1",
     "mocha": "~2.2.4",
     "node-mocks-http": "~1.4.2"
+  },
+  "dependencies": {
+    "auth-rbac": "~0.1.7"
   }
 }
