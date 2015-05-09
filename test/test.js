@@ -1,70 +1,71 @@
-var auth = require('./common');
 var should = require('should');
 var httpMocks = require('node-mocks-http');
 
 var rbac = {};
 rbac.httpBasic = require('../');
+var auth = require('./common');
 
-describe('authRbacHttpBasic', function() {
-	var httpBasicInfo = null;
+function checkRequestAuthInfo(req) {
+	req.should.have.property('auth');
+	req.auth.should.have.properties(['user', 'role']);
+	(req.auth.user !== null).should.be.true;
+	(req.auth.role !== null).should.be.true;
+}
+
+function checkAskForCredentialsResponse(res) {
+	res.statusCode.should.equal(401);
+	var authHeader = res.getHeader('WWW-Authenticate');
+	(authHeader !== null).should.be.true;
+	var data = /realm="([^"]*)"/i.exec(authHeader);
+	(data !== null).should.be.true;
+	data[1].should.equal('test');
+}
+
+describe('httpBasic', function() {
+	var httpBasic = null;
 	
 	before(function() {
-		httpBasicInfo = rbac.httpBasic(auth, 'auth-rbac-http-basic');
+		httpBasic = rbac.httpBasic(auth, 'test');
 	});
 	
-	describe('credentialsGiven', function() {
-		it('should return true if req has authorization header', function() {
-			var req = httpMocks.createRequest({ headers: {
-				authorization: 'Authorization: Basic dXNlcjoxMjM0'
-			}});
-			var valid = httpBasicInfo.credentialsGiven(req);
-			valid.should.be.true;
-		});
-		
-		it('should return false otherwise', function() {
-			var req = httpMocks.createRequest();
-			var valid = httpBasicInfo.credentialsGiven(req);
-			valid.should.be.false;
-		});
-	});
-	
-	describe('extractCredentials', function() {
-		it('should extract credentials from auth header', function() {
-			var req = httpMocks.createRequest({ headers: {
-				authorization: 'Authorization: Basic dXNlcjoxMjM0'
-			}});
-			var creds = httpBasicInfo.extractCredentials(req);
-			creds.should.have.properties({
-				user: 'user', pass: '1234'
-			});
-		});
-		
-		it('should return empty object if schema is not Basic', function() {
-			var req = httpMocks.createRequest({ headers: {
-				authorization: 'Authorization: Unknown ABCDEF0123456789'
-			}});
-			var creds = httpBasicInfo.extractCredentials(req);
-			creds.should.be.empty;
-		});
-		
-		it('should return empty object if invalid base64', function() {
-			var req = httpMocks.createRequest({ headers: {
-				authorization: 'Authorization: Basic !"·$%&/()=?¿'
-			}});
-			var creds = httpBasicInfo.extractCredentials(req);
-			creds.should.be.empty;
+	it('should put auth info in req.auth if valid credentials given', function(done) {
+		var req = httpMocks.createRequest({ headers: {
+			// Authorization: Basic #{base64('guest:1234')}
+			authorization: 'Authorization: Basic Z3Vlc3Q6MTIzNA=='
+		}});
+		var res = httpMocks.createResponse();
+		httpBasic(req, res, function(err) {
+			if (err)
+				return done(err);
+			checkRequestAuthInfo(req);
+			done();
 		});
 	});
 	
-	describe('askForCredentials', function() {
-		it('should return appropiate response header', function() {
-			var res = httpMocks.createResponse();
-			httpBasicInfo.askForCredentials(res);
-			res.statusCode.should.equal(401);
-			var authHeader = res.getHeader('WWW-Authenticate');
-			var data = /realm="([^"]*)"/i.exec(authHeader);
-			(data !== null).should.be.true;
-			data[1].should.equal('auth-rbac-http-basic');
+	it('should respond with error if auth method is not basic', function(done) {
+		var req = httpMocks.createRequest({ headers: {
+			// Authorization: Unknown #{base64('guest:1234')}
+			authorization: 'Authorization: Unknown Z3Vlc3Q6MTIzNA=='
+		}});
+		var res = httpMocks.createResponse();
+		httpBasic(req, res, function(err) {
+			if (err)
+				return done(err);
+			req.should.not.have.property('auth');
+			checkAskForCredentialsResponse(res);
+			return done();
+		});
+	});
+	
+	it('should respond with error if auth header is not present', function(done) {
+		var req = httpMocks.createRequest();
+		var res = httpMocks.createResponse();
+		httpBasic(req, res, function(err) {
+			if (err)
+				return done(err);
+			req.should.not.have.property('auth');
+			checkAskForCredentialsResponse(res);
+			done();
 		});
 	});
 });

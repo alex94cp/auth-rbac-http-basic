@@ -1,4 +1,4 @@
-var rbac = require('../');
+var rbac = require('auth-rbac');
 
 var authInfo = {
 	userRoles: {
