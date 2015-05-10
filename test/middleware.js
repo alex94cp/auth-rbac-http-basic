@@ -9,8 +9,8 @@ var auth = require('./common');
 function checkRequestAuthInfo(req) {
 	req.should.have.property('auth');
 	req.auth.should.have.properties(['user', 'role']);
-	(req.auth.user !== null).should.be.true;
-	(req.auth.role !== null).should.be.true;
+	(!!req.auth.user).should.be.true;
+	(!!req.auth.role).should.be.true;
 }
 
 function checkAskForCredentialsResponse(res) {
@@ -18,7 +18,7 @@ function checkAskForCredentialsResponse(res) {
 	var authHeader = res.getHeader('WWW-Authenticate');
 	(authHeader !== null).should.be.true;
 	var data = /realm="([^"]*)"/i.exec(authHeader);
-	(data !== null).should.be.true;
+	(!!data).should.be.true;
 	data[1].should.equal('test');
 }
 
@@ -43,7 +43,7 @@ describe('httpBasic', function() {
 		});
 	});
 
-	it('should respond with error if auth method is not basic', function(done) {
+	it('should respond with error and send realm if auth method is not basic', function(done) {
 		var req = httpMocks.createRequest({ headers: {
 			// Authorization: Unknown #{base64('guest:1234')}
 			authorization: 'Authorization: Unknown Z3Vlc3Q6MTIzNA=='
@@ -58,7 +58,7 @@ describe('httpBasic', function() {
 		});
 	});
 
-	it('should respond with error if auth header is not present', function(done) {
+	it('should respond with error and send realm if auth header is not present', function(done) {
 		var req = httpMocks.createRequest();
 		var res = httpMocks.createResponse();
 		httpBasic(req, res, function(err) {
@@ -66,7 +66,7 @@ describe('httpBasic', function() {
 				return done(err);
 			req.should.not.have.property('auth');
 			checkAskForCredentialsResponse(res);
-			done();
+			return done();
 		});
 	});
 });
