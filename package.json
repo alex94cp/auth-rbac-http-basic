@@ -4,7 +4,8 @@
   "description": "HTTP Basic Authentication plugin for auth-rbac",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "test-coverage": "istanbul cover _mocha"
   },
   "repository": {
     "type": "git",
@@ -22,9 +23,12 @@
     "url": "https://github.com/alex94puchades/auth-rbac-http-basic/issues"
   },
   "devDependencies": {
-    "should": "~6.0.1",
+    "coveralls": "^2.11.2",
+    "istanbul": "^0.3.14",
     "mocha": "~2.2.4",
-    "node-mocks-http": "~1.4.2"
+    "mocha-lcov-reporter": "0.0.2",
+    "node-mocks-http": "~1.4.2",
+    "should": "~6.0.1"
   },
   "dependencies": {
     "auth-rbac": "~0.1.7"

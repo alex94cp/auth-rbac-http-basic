@@ -29,7 +29,7 @@ describe('httpBasic', function() {
 		httpBasic = authRbac.httpBasic(auth, 'test');
 	});
 
-	it('should put auth info in req.auth if valid credentials given', function(done) {
+	it('puts auth info in req.auth if valid credentials given', function(done) {
 		var req = httpMocks.createRequest({ headers: {
 			// Authorization: Basic #{base64('guest:1234')}
 			authorization: 'Authorization: Basic Z3Vlc3Q6MTIzNA=='
@@ -43,7 +43,7 @@ describe('httpBasic', function() {
 		});
 	});
 
-	it('should respond with error and send realm if auth method is not basic', function(done) {
+	it('responds with error and sends realm if auth method is not basic', function(done) {
 		var req = httpMocks.createRequest({ headers: {
 			// Authorization: Unknown #{base64('guest:1234')}
 			authorization: 'Authorization: Unknown Z3Vlc3Q6MTIzNA=='
@@ -58,7 +58,7 @@ describe('httpBasic', function() {
 		});
 	});
 
-	it('should respond with error and send realm if auth header is not present', function(done) {
+	it('responds with error and sends realm if auth header is not present', function(done) {
 		var req = httpMocks.createRequest();
 		var res = httpMocks.createResponse();
 		httpBasic(req, res, function(err) {
