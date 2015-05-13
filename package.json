@@ -1,6 +1,6 @@
 {
   "name": "auth-rbac-http-basic",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "HTTP Basic Authentication plugin for auth-rbac",
   "main": "index.js",
   "scripts": {
@@ -23,6 +23,7 @@
     "url": "https://github.com/alex94puchades/auth-rbac-http-basic/issues"
   },
   "devDependencies": {
+    "chai": "^2.3.0",
     "coveralls": "^2.11.2",
     "istanbul": "^0.3.14",
     "mocha": "~2.2.4",
