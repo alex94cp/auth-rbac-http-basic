@@ -1,25 +1,22 @@
-var should = require('should');
+var chai = require('chai');
+var expect = chai.expect;
 var httpMocks = require('node-mocks-http');
 
-var authRbac = {};
+var authRbac = require('auth-rbac');
 authRbac.httpBasic = require('../');
-
 var auth = require('./common');
 
 function checkRequestAuthInfo(req) {
-	req.should.have.property('auth');
-	req.auth.should.have.properties(['user', 'role']);
-	(!!req.auth.user).should.be.true;
-	(!!req.auth.role).should.be.true;
+	expect(req).to.have.deep.property('auth.user').that.exists;
+	expect(req).to.have.deep.property('auth.role').that.exists;
 }
 
 function checkAskForCredentialsResponse(res) {
-	res.statusCode.should.equal(401);
+	expect(res).to.have.property('statusCode', 401);
 	var authHeader = res.getHeader('WWW-Authenticate');
-	(authHeader !== null).should.be.true;
+	expect(authHeader).to.be.ok;
 	var data = /realm="([^"]*)"/i.exec(authHeader);
-	(!!data).should.be.true;
-	data[1].should.equal('test');
+	expect(data).to.be.ok.and.have.deep.property('[1]', 'test');
 }
 
 describe('httpBasic', function() {
@@ -52,7 +49,7 @@ describe('httpBasic', function() {
 		httpBasic(req, res, function(err) {
 			if (err)
 				return done(err);
-			req.should.not.have.property('auth');
+			expect(req).to.not.have.property('auth');
 			checkAskForCredentialsResponse(res);
 			return done();
 		});
@@ -64,7 +61,7 @@ describe('httpBasic', function() {
 		httpBasic(req, res, function(err) {
 			if (err)
 				return done(err);
-			req.should.not.have.property('auth');
+			expect(req).to.not.have.property('auth');
 			checkAskForCredentialsResponse(res);
 			return done();
 		});
