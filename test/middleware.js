@@ -14,9 +14,7 @@ function checkRequestAuthInfo(req) {
 function checkAskForCredentialsResponse(res) {
 	expect(res).to.have.property('statusCode', 401);
 	var authHeader = res.getHeader('WWW-Authenticate');
-	expect(authHeader).to.be.ok;
-	var data = /realm="([^"]*)"/i.exec(authHeader);
-	expect(data).to.be.ok.and.have.deep.property('[1]', 'test');
+	expect(authHeader).to.have.string('realm="test"');
 }
 
 describe('httpBasic', function() {
@@ -29,7 +27,7 @@ describe('httpBasic', function() {
 	it('puts auth info in req.auth if valid credentials given', function(done) {
 		var req = httpMocks.createRequest({ headers: {
 			// Authorization: Basic #{base64('guest:1234')}
-			authorization: 'Authorization: Basic Z3Vlc3Q6MTIzNA=='
+			authorization: 'Basic Z3Vlc3Q6MTIzNA=='
 		}});
 		var res = httpMocks.createResponse();
 		httpBasic(req, res, function(err) {
@@ -43,7 +41,7 @@ describe('httpBasic', function() {
 	it('responds with error and sends realm if auth method is not basic', function(done) {
 		var req = httpMocks.createRequest({ headers: {
 			// Authorization: Unknown #{base64('guest:1234')}
-			authorization: 'Authorization: Unknown Z3Vlc3Q6MTIzNA=='
+			authorization: 'Unknown Z3Vlc3Q6MTIzNA=='
 		}});
 		var res = httpMocks.createResponse();
 		httpBasic(req, res, function(err) {
