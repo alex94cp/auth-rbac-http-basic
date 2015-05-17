@@ -35,7 +35,7 @@ describe('httpBasic', function() {
 			if (err)
 				return done(err);
 			checkRequestAuthInfo(req);
-			done();
+			return done();
 		});
 	});
 
