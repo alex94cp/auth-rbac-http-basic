@@ -1,4 +1,5 @@
 var chai = require('chai');
+var sinon = require('sinon');
 var expect = chai.expect;
 var httpMocks = require('node-mocks-http');
 
@@ -38,30 +39,26 @@ describe('httpBasic', function() {
 		});
 	});
 
-	it('responds with error and sends realm if auth method is not basic', function(done) {
+	it('responds with error and sends realm if auth method is not basic', function() {
 		var req = httpMocks.createRequest({ headers: {
 			// Authorization: Unknown #{base64('guest:1234')}
 			authorization: 'Unknown Z3Vlc3Q6MTIzNA=='
 		}});
 		var res = httpMocks.createResponse();
-		httpBasic(req, res, function(err) {
-			if (err)
-				return done(err);
-			expect(req).to.not.have.property('auth');
-			checkAskForCredentialsResponse(res);
-			return done();
-		});
+		var callback = sinon.spy();
+		httpBasic(req, res, callback);
+		expect(callback.called).to.be.false;
+		expect(req).to.not.have.property('auth');
+		checkAskForCredentialsResponse(res);
 	});
 
-	it('responds with error and sends realm if auth header is not present', function(done) {
+	it('responds with error and sends realm if auth header is not present', function() {
 		var req = httpMocks.createRequest();
 		var res = httpMocks.createResponse();
-		httpBasic(req, res, function(err) {
-			if (err)
-				return done(err);
-			expect(req).to.not.have.property('auth');
-			checkAskForCredentialsResponse(res);
-			return done();
-		});
+		var callback = sinon.spy();
+		httpBasic(req, res, callback);
+		expect(callback.called).to.be.false;
+		expect(req).to.not.have.property('auth');
+		checkAskForCredentialsResponse(res);
 	});
 });
