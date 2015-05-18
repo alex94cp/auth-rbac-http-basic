@@ -29,6 +29,15 @@ describe('authRbacHttpBasic', function() {
 			expect(creds).to.have.property('pass', 'pass');
 		});
 
+		it('returns correct credentials even if password is empty', function() {
+			var req = httpMocks.createRequest({ headers: {
+				authorization: 'Basic ' + base64Encode('user:')
+			}});
+			var creds = extractCredentials(req);
+			expect(creds).to.have.property('user', 'user');
+			expect(creds).to.have.property('pass', '');
+		});
+
 		it('returns null if auth header not set', function() {
 			var req = httpMocks.createRequest();
 			var creds = extractCredentials(req);
