@@ -4,7 +4,7 @@ var httpMocks = require('node-mocks-http');
 
 var authRbacHttpBasic = require('../');
 
-function base64Encode(data) {
+function base64(data) {
 	return new Buffer(data).toString('base64');
 };
 
@@ -22,25 +22,16 @@ describe('authRbacHttpBasic', function() {
 
 		it('returns credentials from request', function() {
 			var req = httpMocks.createRequest({ headers: {
-				authorization: 'Basic ' + base64Encode('user:pass')
+				authorization: 'Basic ' + base64('user:pass')
 			}});
 			var creds = extractCredentials(req);
 			expect(creds).to.have.property('user', 'user');
 			expect(creds).to.have.property('pass', 'pass');
 		});
 
-		it('returns url-decoded credentials from request', function() {
-			var req = httpMocks.createRequest({ headers: {
-				authorization: 'Basic ' + base64Encode('user%40domain.com:pass')
-			}});
-			var creds = extractCredentials(req);
-			expect(creds).to.have.property('user', 'user@domain.com');
-			expect(creds).to.have.property('pass', 'pass');
-		});
-
 		it('returns correct credentials even if password is empty', function() {
 			var req = httpMocks.createRequest({ headers: {
-				authorization: 'Basic ' + base64Encode('user:')
+				authorization: 'Basic ' + base64('user:')
 			}});
 			var creds = extractCredentials(req);
 			expect(creds).to.have.property('user', 'user');
@@ -55,7 +46,7 @@ describe('authRbacHttpBasic', function() {
 
 		it('returns null if auth method not basic', function() {
 			var req = httpMocks.createRequest({ headers: {
-				authorization: 'Invalid ' + base64Encode('user:pass')
+				authorization: 'Invalid ' + base64('user:pass')
 			}});
 			var creds = extractCredentials(req);
 			expect(creds).to.not.exist;
@@ -63,7 +54,7 @@ describe('authRbacHttpBasic', function() {
 
 		it('returns null if credentials in invalid format', function() {
 			var req = httpMocks.createRequest({ headers: {
-				authorization: 'Basic ' + base64Encode('user')
+				authorization: 'Basic ' + base64('user')
 			}});
 			var creds = extractCredentials(req);
 			expect(creds).to.not.exist;
@@ -71,7 +62,7 @@ describe('authRbacHttpBasic', function() {
 
 		it('returns null if credentials contain invalid characters', function() {
 			var req = httpMocks.createRequest({ headers: {
-				authorization: 'Basic ' + base64Encode('us:er:pass')
+				authorization: 'Basic ' + base64('us:er:pass')
 			}});
 			var creds = extractCredentials(req);
 			expect(creds).to.not.exist;
