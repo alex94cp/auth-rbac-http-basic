@@ -1,6 +1,6 @@
 {
   "name": "auth-rbac-http-basic",
-  "version": "0.3.4",
+  "version": "0.4.0",
   "description": "HTTP Basic Authentication plugin for auth-rbac",
   "main": "index.js",
   "scripts": {
