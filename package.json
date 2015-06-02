@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/alex94puchades/auth-rbac-http-basic.git"
+    "url": "https://github.com/alex94puchades/node-auth-rbac-http-basic.git"
   },
   "keywords": [
     "auth",
@@ -20,9 +20,9 @@
   "author": "Alejandro Caravaca Puchades <alex94puchades@gmail.com>",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/alex94puchades/auth-rbac-http-basic/issues"
+    "url": "https://github.com/alex94puchades/node-auth-rbac-http-basic/issues"
   },
-  "homepage": "https://github.com/alex94puchades/auth-rbac-http-basic#readme",
+  "homepage": "https://github.com/alex94puchades/node-auth-rbac-http-basic#readme",
   "devDependencies": {
     "chai": "^2.3.0",
     "coveralls": "^2.11.2",
