@@ -1,7 +1,5 @@
 # auth-rbac-http-auth
 
-[![Build Status](https://travis-ci.org/alex94puchades/node-auth-rbac-http-basic.svg?branch=master)](https://travis-ci.org/alex94puchades/node-auth-rbac-http-basic)
-[![Dependencies](https://david-dm.org/alex94puchades/node-auth-rbac-http-basic.svg)](https://david-dm.org/alex94puchades/node-auth-rbac-http-basic)
-[![Coverage Status](https://coveralls.io/repos/alex94puchades/node-auth-rbac-http-basic/badge.svg)](https://coveralls.io/r/alex94puchades/node-auth-rbac-http-basic)
+HTTP Basic Authentication plugin for [auth-rbac](https://github.com/alex94puchades/auth-rbac.git)
 
-HTTP Basic Authentication plugin for [auth-rbac](https://github.com/alex94puchades/node-auth-rbac.git)
+**Warning:** This package is not maintained anymore. It is not compatible (and it probably never will) with versions >= 0.5 of auth-rbac, as auth-rbac no longer takes care of user authentication. You are encouraged to use [passport](http://passportjs.org/) for user *authentication*, while auth-rbac can still be used for user *authorization* (aka *access control*). Sorry for the inconvenience.
